@@ -5,6 +5,11 @@ import urllib.parse
 
 app = Flask(__name__) # 應用程式初始化
 
+@app.route('/')
+def start():
+    talk = '啟動成功'
+    return talk
+
 # 如果想將arg 傳入所定義好的 function,可以使用以下方法 
 @app.route('/article/<arg>')
 def show_user_profile(arg):
@@ -13,11 +18,11 @@ def show_user_profile(arg):
     chinese_word = urllib.parse.unquote(arg).replace('未經許可，禁止轉載責任編輯：',"").replace('.',"")
 
     #### 載入自訂義關鍵字 ####
-    file_name = r'C:\Users\CFD029\Desktop\suggest_keyword1.txt'
+    file_name = './suggest_keyword.txt'
     jieba.load_userdict(file_name) 
 
     #### 載入停用關鍵字 #####
-    with open(r"C:\Users\CFD029\Desktop\stop_words.txt","r",encoding='utf-8') as f:
+    with open("./stop_words.txt","r",encoding='utf-8') as f:
         stop_word = f.read().replace("\ufeff","").split(",")
 
 
@@ -40,8 +45,6 @@ def show_user_profile(arg):
     words = ",".join(top4_Word_ls)
     return words
 
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5500) # 正式運作api時 , 請調整回debug=false
-                                   # port=5500 可以依情況修改, 啟動網址 → http://127.0.0.1:5500(本機端執行，無法從外部拜訪)
+app.run(debug=False) # 正式運作api時 , 請調整回debug=false
+                     # port=5500 可以依情況修改, 啟動網址 → http://127.0.0.1:5500(本機端執行，無法從外部拜訪)
 
