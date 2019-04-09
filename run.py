@@ -15,7 +15,8 @@ def start():
 def show_user_profile(arg):
     
     #### 解碼成中文字串 ####
-    chinese_word = urllib.parse.unquote(arg).replace('未經許可，禁止轉載責任編輯：',"").replace('.',"")
+    chinese_word = urllib.parse.unquote(arg).replace('未經許可，禁止轉載責任編輯：',"")
+    chinese_word = chinese_word.replace('.',"").replace('+','').replace('0','').replace('_','')
 
     #### 載入自訂義關鍵字 ####
     file_name = './suggest_keyword.txt'
@@ -47,4 +48,3 @@ def show_user_profile(arg):
 
 app.run(debug=False) # 正式運作api時 , 請調整回debug=false
                      # port=5500 可以依情況修改, 啟動網址 → http://127.0.0.1:5500(本機端執行，無法從外部拜訪)
-
