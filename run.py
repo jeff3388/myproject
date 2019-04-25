@@ -11,22 +11,23 @@ import sqlite3
 import config
 import jieba
 
-
 app = Flask(__name__) # 應用程式初始化
 app.config.from_object(config)
 
+# 定義傳遞的 json format
 def json_format(data,status,msg):
     response = {"data":data,"status":status,"msg":[msg]}
     r = str(response)
     return r
+
 # 定義資料庫物件
 # @app.route('/keyword/<keyword>')
 def get_db(keyword):
     k = ('%' + keyword + '%',)
     try:
         db_keyword_str = ""
-        db_path = '/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/keyword.db'
-        # db_path = 'keyword.db'
+        # db_path = '/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/keyword.db'
+        db_path = 'keyword.db'
         DB = sqlite3.connect(db_path)
         cur = DB.execute('''SELECT * FROM
                                 keyword_table 
@@ -60,7 +61,7 @@ def start():
 @app.route("/post_submit", methods=['GET', 'POST'])
 def submit():
     if request.method == 'POST':
-        # 取 article 的 values
+        # 透過 request.values['article'] 的方法取得 values
         article = request.values['article']
         chinese_word = article.replace('.',"").replace('+','').replace('0','').replace('_','').replace('未經許可，禁止轉載責任編輯：',"")
 
@@ -113,14 +114,12 @@ def submit():
             if len(result) > 10:
                 result = list(set(result[:15]))
                 data = result[:10]
-                # data = ",".join(result[:10])
                 status = "true"
                 msg = "success"
                 result_str = json_format(data,status,msg)
             
             # 若關鍵字數量小於等於10個則直接輸出
             elif len(result) <= 10:
-                # data = ",".join(result)
                 data = result
                 status = "true"
                 msg = "success"
