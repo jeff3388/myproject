@@ -28,8 +28,8 @@ def get_db(keyword):
     k = ('%' + keyword + '%',)
     try:
         db_keyword_str = ""
-        # db_path = '/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/keyword.db'
-        db_path = 'keyword.db'
+        db_path = '/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/keyword.db'
+        # db_path = 'keyword.db'
         DB = sqlite3.connect(db_path)
         cur = DB.execute('''SELECT * FROM
                                 keyword_table 
@@ -75,6 +75,7 @@ def search_data(date):
 def start():
     return render_template('hello.html')
 
+# 撈取關鍵字數量報告
 @app.route('/keyword-date', methods=['GET', 'POST'])
 def date():
     if request.method == 'GET':
@@ -106,13 +107,13 @@ def submit():
         chinese_word = article.replace('.',"").replace('+','').replace('0','').replace('_','').replace('未經許可，禁止轉載責任編輯：',"")
 
         #### 載入自訂義關鍵字 ####
-        # file_name = '/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/suggest_keyword.txt'
-        file_name = 'suggest_keyword.txt'
+        file_name = '/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/suggest_keyword.txt'
+        # file_name = 'suggest_keyword.txt'
         jieba.load_userdict(file_name) 
 
         #### 載入停用關鍵字 #####
-        # stop_word_path = "/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/stop_words.txt"
-        stop_word_path = "stop_words.txt"
+        stop_word_path = "/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/stop_words.txt"
+        # stop_word_path = "stop_words.txt"
         with open(stop_word_path,"r",encoding='utf-8') as f:
             stop_word = f.read().replace("\ufeff","").split(",")
             
