@@ -21,6 +21,17 @@ headers = {
             '(KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36'
         }
 
+### 獲取資料庫所有資料 ###
+def get_all_data(table_name):
+    key_ls = []
+    with con:
+        c.execute('SELECT * FROM '+ "'" + table_name + "'" + 'ORDER BY keyword')
+        rows = c.fetchall()
+        for row in rows:
+            r = row[0]
+            if r != '':
+                key_ls += [r]
+    return key_ls
 
 # 統計資料庫關鍵字數量
 def get_data(table_name):
@@ -33,7 +44,7 @@ def get_data(table_name):
     
 # 統計數據寫入 CSV
 def write_csv(datetime_str, political, society, life ,international ,chian ,finance ,cloud ,entertainment ,health ,travel,house,sport):
-    with open('./output.csv', 'a', newline='') as csvfile:
+    with open('/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/output.csv', 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
 
         # 寫入另外幾列資料
@@ -488,7 +499,7 @@ for url,target_url in url_dit.items():
 
 
 ######## 資料庫 #########
-db_name = '/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info\ETtoday_keyword.db'
+db_name = '/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/ETtoday_keyword.db'
 con = sqlite3.connect(db_name) 
 c = con.cursor() # 建立連線物件
 
@@ -567,8 +578,52 @@ house = get_data("house_table")                 # 房地產 → 關鍵字數量
 sport = get_data("sport_table")                 # 運動 → 關鍵字數量
 
 # 日期
-datetime_dt = datetime.datetime.today()# 獲得當地時間
+datetime_dt = datetime.datetime.today() # 獲得當地時間
 datetime_str = datetime_dt.strftime("%Y-%m-%d")
 
 # 將統計數據寫入 CSV 檔
 write_csv(datetime_str, political, society, life ,international ,chian ,finance ,cloud ,entertainment ,health ,travel,house,sport)
+
+## 從資料庫抽取所有關鍵字，更新 jieba 語料庫資料
+k1 = get_all_data("political_table")
+k2 = get_all_data("society_table")
+k3 = get_all_data("life_table")
+k4 = get_all_data("international_table")
+k5 = get_all_data("chian_table")
+k6 = get_all_data("finance_table")
+k7 = get_all_data("cloud_table")
+k8 = get_all_data("entertainment_table")
+k9 = get_all_data("health_table")
+k10 = get_all_data("tourism_table")
+k11 = get_all_data("house_table")
+k12 = get_all_data("sport_table")
+k13 = get_all_data("old_table")
+
+keyword_ls = k1+k2+k3+k4+k5+k6+k7+k8+k9+k10+k11+k12+k13
+ettoday_ls = list(set(keyword_ls))
+
+tk_ls = []
+
+###### 關鍵字權重分類 #######
+for total_keyword in ettoday_ls:
+    
+    if len(total_keyword) == 1:
+        tk = total_keyword + ' 1\n'
+        tk_ls += [tk]
+        
+    elif len(total_keyword) == 2:
+        tk = total_keyword + ' 3\n'
+        tk_ls += [tk]
+        
+    elif len(total_keyword) == 3:
+        tk = total_keyword + ' 5\n'
+        tk_ls += [tk]
+        
+    else:
+        tk = total_keyword + ' 10\n'
+        tk_ls += [tk]
+
+content = "".join(tk_ls)
+        
+with open("/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/suggest_keyword.txt","w",encoding="utf-8",errors="ingnor") as keywords:
+    keywords.write(content)

@@ -5,6 +5,8 @@ from flask import Flask
 from jieba.analyse import *
 from flask import request
 from flask import Flask
+import pandas as pd
+import numpy as np
 import urllib.parse
 import itertools
 import sqlite3
@@ -46,29 +48,19 @@ def get_db(keyword):
         return err
 
 # 讀取關鍵字數據
-def search_data(date):
-    with open('/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/output.csv', 'r') as f:
-        reader = csv.reader(f)
-        for row in reader:
-            if date in row:
-                date = row[0] # 日期
-                political = row[1] # 政治
-                society = row[2] # 社會
-                life = row[3] # 生活
-                international = row[4] # 國際
-                chian = row[5] # 大陸
-                finance = row[6] # 財經
-                cloud = row[7] # 雲論
-                entertainment = row[8] # 財經
-                health = row[9] # 國際
-                travel = row[10] # 大陸
-                house = row[11] # 財經
-                sport = row[12] # 財經
+def search_data(date_time):
+    try:
+        bond = pd.read_csv('/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/output.csv',index_col="date")
+        date = bond.loc[date_time]
+        date_array = np.array(date) # 先轉換 numpy array
+        date_list = date_array.tolist()# 使用 tolist() 方法轉換成 list 格式
 
-            else:
-                date, political, society, life ,international ,chian ,finance ,cloud ,entertainment ,health ,travel,house,sport = date,"0","0","0","0","0","0","0","0","0","0","0","0"
-                      
-    return date, political, society, life ,international ,chian ,finance ,cloud ,entertainment ,health ,travel,house,sport
+        return date_time, date_list
+
+    except:
+        date_list = ["0","0","0","0","0","0","0","0","0","0","0","0"]
+
+        return date_time, date_list
 
 # 啟動渲染的 html page 
 @app.route('/')
@@ -83,20 +75,20 @@ def date():
         
     else:
         date_time = request.form.get('date') # 取得日期
-        date, political, society, life ,international ,chian ,finance ,cloud ,entertainment ,health ,travel,house,sport = search_data(date_time) # 讀取 CSV 檔的數據
-        return render_template('keyword_quantity.html', political=political # 政治
-                                                      , society=society # 社會
-                                                      , travel=travel # 旅遊
-                                                      , life=life # 生活
-                                                      , international=international # 國際
-                                                      , chian=chian # 大陸
-                                                      , finance=finance # 財經
-                                                      , date = date # 日期
-                                                      , cloud = cloud # 雲論
-                                                      , entertainment = entertainment # 娛樂
-                                                      , health = health # 健康
-                                                      , house = house # 房地產
-                                                      , sport = sport # 運動
+        date_time, date_list = search_data(date_time) # 讀取 CSV 檔的數據
+        return render_template('keyword_quantity.html', political = date_list[0] # 政治
+                                                      , society = date_list[1] # 社會
+                                                      , life = date_list[2] # 生活
+                                                      , international=date_list[3] # 國際
+                                                      , chian = date_list[4] # 大陸
+                                                      , finance = date_list[5] # 財經
+                                                      , cloud = date_list[6] # 雲論
+                                                      , entertainment = date_list[7] # 娛樂
+                                                      , health = date_list[8] # 健康
+                                                      , travel= date_list[9] # 旅遊
+                                                      , house = date_list[10] # 房地產
+                                                      , sport = date_list[11] # 運動
+                                                      , date = date_time # 日期
                                                       )
 
 @app.route("/post_submit", methods=['GET', 'POST'])
