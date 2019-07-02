@@ -1,3 +1,4 @@
+# _*_ coding:utf-8 _*_
 from bs4 import BeautifulSoup
 import requests as res
 import datetime
@@ -7,6 +8,7 @@ import csv
 import re
 
 db_name = '/home/cfd888/external_hdd/public_html/temp.check-article.cfd888.info/ETtoday_keyword.db'
+# db_name = './ETtoday_keyword.db'
 con = sqlite3.connect(db_name) 
 c = con.cursor() # 建立連線物件
 
