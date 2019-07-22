@@ -207,7 +207,7 @@ try:
 
     house_article_url = [] # 房地產連結
     for page in range(1,w):
-        target_url = 'https://house.ettoday.net/index/'+ str(page)
+        target_url = 'https://house.ettoday.net/index/' + str(page) 
         html = s.get(target_url,headers=headers,timeout=15).content
         house_url_ls = obj.house_article_link(html)
         time.sleep(3)

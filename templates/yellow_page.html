@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+
+    <title>統計數據報表</title>
+    <style type="text/css">
+        [type="date"] {
+        background:#fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)  97% 50% no-repeat ;
+        }
+        [type="date"]::-webkit-inner-spin-button {
+        display: none;
+        }
+        [type="date"]::-webkit-calendar-picker-indicator {
+        opacity: 0;
+        }
+    
+        /* custom styles */
+        body {
+        padding: 4em;
+        background: #e5e5e5;
+        font: 13px/1.4 Geneva, 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+        }
+        label {
+        display: block;
+        }
+        input {
+        border: 1px solid #c4c4c4;
+        border-radius: 15px;
+        background-color: #fff;
+        padding: 3px 5px;
+        box-shadow: inset 0 6px 6px rgba(0,0,0,0.1);
+        width: 370px;
+        font-family: 'PT Sans', sans-serif;
+        font-size: 1.5rem;
+        display: block;
+        padding: 0.8rem 1rem;
+        }
+
+        td {
+        font-size:22px; /* 欄位字體大小 */
+        }
+
+        div.justified {
+        display: flex;
+        /* padding: 0px 0px 0px 550px; */
+
+        /* 內容置中 */
+        justify-content: center;
+        /* 向左浮動 */
+        /* float:left;  */
+        }
+
+        h1 {
+        text-shadow:3px 3px 3px #cccccc;
+        }
+
+    </style>
+</head>
+<body>
+    <a href="javascript:jump()" rel="external nofollow" rel="external nofollow" ></a> 
+    <h1 style="font-size: 40px;" align="center" >統計數據報表</h1>
+
+    <div class="justified"> 
+        <form align="center" method='post' action="{{ url_for('yellow_page') }}">
+        <br>
+            <!-- 日期按鈕 -->
+            <input align="center" type="date" name="date"> 
+        <br>
+        <!-- 表格 -->
+        <table align="center" border="1" width="400">
+            <tr>
+                <td colspan="2" align="center" valign="center" height="30px">黃頁任意門</td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center" valign="center" height="30px">{{ date }}</td>
+            </tr>
+            <tr>
+                <td align="center" valign="center">數據總量</td>
+                <td align="center" valign="center" width="180">{{ total_data }}</td>
+            </tr>
+            <tr>
+                <td align="center" valign="center">單日數據總量</td>
+                <td align="center" valign="center" width="180">{{ data_total }}</td>
+            </tr>
+            <tr>
+                <td align="center" valign="center">每小時數據量</td>
+            　  <td align="center" valign="center" width="180">{{ hr_total }}</td>
+            </tr>
+            <tr>
+                <td align="center" valign="center">每分鐘數據量</td>
+                <td align="center" valign="center" width="180">{{ min_total }}</td>
+            </tr>
+            
+        </table>
+        <br>
+        <br>
+            <!-- 提交按鈕 -->
+            <input type="submit" value="送出" style="width:400px;height:80px;background: none; background-color:rgb(166, 166, 243);font-family: '微軟正黑體';font-size: 35px;" > 
+        </form>
+    </div>
+    <br>
+    <!-- 圖片顯示 -->
+    <P Align=center><img src="{{url_for('static',filename='histogram.jpg')}}"></p>
+</body>
+</html>

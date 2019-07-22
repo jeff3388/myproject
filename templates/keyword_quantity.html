@@ -2,10 +2,10 @@
 <html lang="zh-Hant-TW"></html>
 <head>
     <meta charset="UTF-8">
-    <title>關鍵字工具</title>
+    <title>ETtoday 關鍵字</title>
     <style type="text/css">
         [type="date"] {
-      background:#fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)  97% 50% no-repeat ;
+        background:#fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)  97% 50% no-repeat ;
         }
         [type="date"]::-webkit-inner-spin-button {
         display: none;
@@ -35,13 +35,17 @@
         display: block;
         padding: 0.8rem 1rem;
         }
+
         td {
         font-size:22px; /* 欄位字體大小 */
         }
 
         div.justified {
         display: flex;
+        /* 內容置中 */
         justify-content: center;
+        /* 向左浮動 */
+        /* float:left;  */
         }
 
         h1 {
@@ -53,7 +57,7 @@
 <body>
     <h1 style="font-size: 40px;" align="center" >ETtoday 關鍵字統計數據</h1>
     <div class="justified"> 
-        <form align="center" method='post' action="/keyword-date">
+        <form align="center" method='post' action="{{ url_for('keyword_date') }}">
         <br>
             <!-- 日期按鈕 -->
             <input align="center" type="date" name="date"> 
@@ -118,8 +122,7 @@
             <input type="submit" value="送出" style="width:300px;height:80px;background: none; background-color:rgb(166, 166, 243);font-family: '微軟正黑體';font-size: 35px;" > 
         </form>
     </div>
-    <br>
-    <!-- 圖片置中 -->
-    <img src="./static/1.jpg" style="display:block; margin:auto;">
+    <!-- 圖片顯示 -->
+    <!-- <P Align=right><img src="./static/1.jpg"> </p> -->
 </body>
 </html>
